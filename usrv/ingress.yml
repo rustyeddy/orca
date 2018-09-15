@@ -1,0 +1,30 @@
+# Services Must be created before the ingress
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: www
+  annotations: 
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  backend:
+    serviceName: default-http-backend
+    servicePort: 80
+  rules:
+  - host: minikube.local
+    http: 
+      paths:
+        - path: /
+          backend:
+            serviceName: www
+            servicePort: 80
+        - path: /echo
+          backend:
+            serviceName: echo
+            servicePort: 8080
+  - host: www.local
+    http:
+      paths:
+        - path: /
+          backend:
+            serviceName: hello-local
+            servicePort: 80
